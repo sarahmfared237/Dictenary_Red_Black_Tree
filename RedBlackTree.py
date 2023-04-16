@@ -24,15 +24,18 @@ class RedBlackTree:
     def inc_height(self, root:Node):
         self.__height += 1
 
-    def search(self, root:Node, data):
+    def __search_helper(self, data, root:Node):
         if root == Nil.get_instance():
             return False
-        if root.get_value == data:
+        if root.get_value() == data:
             return True
-        elif data > root.get_value:
-            return self.search(root.get_right_node, data)
+        elif data > root.get_value():
+            return self.__search_helper(data, root.get_right_node())
         else:
-            return self.search(root.get_left_node, data)
+            return self.__search_helper(data, root.get_left_node())
+        
+    def search(self, data):
+        return self.__search_helper(data, self.get_root())
         
     def left_rotate(self, x:Node):
         y = x.get_right_node()
@@ -84,7 +87,10 @@ class RedBlackTree:
     def print_tree_helper(self, node:Node, indent, last):
         if node is not Nil.get_instance():
             print(indent, end="")
-            if last:
+            if node == self.get_root():
+                print("ROOT-", end="")
+                indent += "     "
+            elif last:
                 print("R----", end="")
                 indent += "     "
             else:
@@ -92,7 +98,7 @@ class RedBlackTree:
                 indent += "|    "
 
             color = 'R' if node.get_color() == 'red' else 'B'
-            print(node.get_value() + "(" + color + ")")
+            print(node)
             self.print_tree_helper(node.get_left_node(), indent, False)
             self.print_tree_helper(node.get_right_node(), indent, True)
 
@@ -102,8 +108,13 @@ class RedBlackTree:
 
 
 rb = RedBlackTree()
-rb.set_root(Node('4','B'))
-rb.get_root().set_left_node(Node('2', 'R'))
-rb.get_root().get_left_node().set_right_node(Node('3', 'R'))
+rb.set_root(Node("4",'B'))
+rb.get_root().set_right_node(Node("6", 'R'))
+rb.get_root().set_left_node(Node("2", 'R'))
+rb.get_root().get_left_node().set_right_node(Node("3", 'R'))
+rb.get_root().get_left_node().set_left_node(Node("1", 'B'))
+
+
+rb.print_red_black_tree()
 rb.left_rotate(rb.get_root().get_left_node())
 rb.print_red_black_tree()
