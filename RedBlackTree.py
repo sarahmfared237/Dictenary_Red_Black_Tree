@@ -104,7 +104,8 @@ class RedBlackTree:
                     parent.set_left_node(new_node)
 
             self.__fixup(new_node)
-  
+            return
+        
         elif data > root.get_value():
             self.__insert_helper(data, root.get_right_node(), root, height + 1)
         else:
@@ -120,16 +121,16 @@ class RedBlackTree:
         node.get_grand_parent().change_color('R')
 
     def __fixup_case_two(self, node:Node):
-        if node.get_grand_parent().get_left_node() == node.get_parent():
-            node.left_rotate(node.get_parent())
+        if node.get_parent().get_left_node() == node:
+            self.right_rotate(node.get_parent())
         else:
-            node.right_rotate(node.get_parent())
+            self.left_rotate(node.get_parent())
 
     def __fixup_case_three(self, node:Node):
         node.get_parent().change_color('B')
         node.get_grand_parent().change_color('R')
 
-        if node.get_grand_parent().get_left_node() == node.get_parent():
+        if node.get_parent().get_left_node() == node:
             self.right_rotate(node.get_grand_parent())
         else:
             self.left_rotate(node.get_grand_parent())
@@ -140,12 +141,17 @@ class RedBlackTree:
             if node.get_uncle().get_color() == 'R':               # Case 1
                 self.__fixup_case_one(node)
                 node = node.get_grand_parent()
-            else:
-                if node == node.get_parent().get_right_node():    # Case 2
+            else:                                                 # Case 2
+                p = node
+                if (node == node.get_parent().get_right_node() and node.get_parent() == node.get_grand_parent().get_left_node()) or (
+                    node == node.get_parent().get_left_node() and node.get_parent() == node.get_grand_parent().get_right_node()) :   
+                    p = node.get_parent() 
                     self.__fixup_case_two(node)
-                    
-                self.__fixup_case_three(node)                     # Case 3
+
+                self.__fixup_case_three(p)                       # Case 3
                 node = node.get_parent()
+                                 
+
         self.get_root().change_color('B')
 
     # Debug

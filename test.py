@@ -2,10 +2,9 @@ from Dictionary import Dictionary
 
 def main():
     dic = Dictionary()
-    dic.load("dictionary")
+    dic.load("words")
     size_validation(dic)
 
-    
 
 def size_validation(dic:Dictionary):
     print(f'Size:{dic.size()} | Height:{dic.rbTree_height()}')

@@ -9,7 +9,6 @@ class Dictionary:
             lines = file.readlines()
             for line in lines:
                 self.__rbTree.insert(line[:-1])
-        self.__rbTree.print_red_black_tree()
     
     def look_up(self, word):
         return self.__rbTree.search(word)
