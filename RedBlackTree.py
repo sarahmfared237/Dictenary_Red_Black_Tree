@@ -125,8 +125,6 @@ class RedBlackTree:
         else:
             node.right_rotate(node.get_parent())
 
-        self.__fixup_case_three(node)
-
     def __fixup_case_three(self, node:Node):
         node.get_parent().change_color('B')
         node.get_grand_parent().change_color('R')
@@ -139,16 +137,15 @@ class RedBlackTree:
     def __fixup(self, node:Node):
         while node.get_parent().get_color() == 'R':
           
-            if node.get_uncle().get_color() == 'R':   # Case 1
+            if node.get_uncle().get_color() == 'R':               # Case 1
                 self.__fixup_case_one(node)
                 node = node.get_grand_parent()
-            elif node == node.get_right_node():   # Case 2
-                self.__fixup_case_two(node)
+            else:
+                if node == node.get_parent().get_right_node():    # Case 2
+                    self.__fixup_case_two(node)
+                    
+                self.__fixup_case_three(node)                     # Case 3
                 node = node.get_parent()
-            else:                                         # Case 3
-                self.__fixup_case_three(node)
-                node = node.get_parent()
-            
         self.get_root().change_color('B')
 
     # Debug
@@ -174,8 +171,8 @@ class RedBlackTree:
 
 
 # rb = RedBlackTree()
-# rb.insert(4)
-# rb.insert(2)
-# rb.insert(1)
-# rb.insert(3)
+# rb.insert("aa")
+# rb.insert("ab")
+# rb.insert("aab")
+# rb.insert("bb")
 # rb.print_red_black_tree()
