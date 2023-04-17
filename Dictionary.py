@@ -1,3 +1,4 @@
+
 from RedBlackTree import RedBlackTree
 
 class Dictionary:
@@ -21,7 +22,7 @@ class Dictionary:
             self.__rbTree.insert(word)
             print(self.size())
             print(self.rbTree_height())
-        self.__rbTree.print_red_black_tree()
+        #self.__rbTree.print_red_black_tree()
 
     def size(self):
         return self.__rbTree.get_size()
