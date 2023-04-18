@@ -18,6 +18,8 @@ def main():
                 print("No")
         else:
             break 
+
+        size_validation(dic)
     
 
 def size_validation(dic:Dictionary):

@@ -110,50 +110,46 @@ class RedBlackTree:
         else:
             self.__insert_helper(data, root.get_left_node(), root)
         
+    def fixup_case1(self, node:Node):
+        node.get_uncle().change_color('B')
+        node.get_parent().change_color('B')
+        node.get_grand_parent().change_color('R')
+    
+    def fixup_case2(self, node_parent:Node):
+        if node_parent.get_parent().get_left_node() == node_parent:
+            self.left_rotate(node_parent)
+        elif node_parent.get_parent().get_right_node() == node_parent:
+            self.right_rotate(node_parent)
+
+    def fixup_case3(self, node:Node):
+        node.get_parent().change_color('B')
+        node.get_grand_parent().change_color('R')
+
+        if node.get_grand_parent().get_left_node() == node.get_parent():
+            self.right_rotate(node.get_grand_parent())
+        elif node.get_grand_parent().get_right_node() == node.get_parent():
+            self.left_rotate(node.get_grand_parent())
+
     def insert(self, data):            
         self.__insert_helper(data, self.get_root(), Nil.get_instance())
         self.inc_size()
 
     def __insert_fixup(self, node:Node):
-        while node.get_parent().get_color()=='R':
-            if node.get_parent()==node.get_grand_parent().get_left_node():
-                node = self.fix_leftChild_parent(node)
+        while node.get_parent().get_color() == 'R':
+            if node.get_uncle().get_color() == 'R':
+                self.fixup_case1(node)
+                node = node.get_grand_parent()
             else:
-                node = self.fix_rightChild_parent(node)
-   
+                # Case 2
+                if ((node.get_grand_parent().get_left_node() == node.get_parent() and node.get_parent().get_right_node() == node) or 
+                    (node.get_grand_parent().get_right_node() == node.get_parent() and node.get_parent().get_left_node() == node)):
+                    node = node.get_parent()
+                    self.fixup_case2(node)
+                
+                self.fixup_case3(node) # Case 3
+
         self.get_root().change_color('B')
 
-    def fix_leftChild_parent(self, node:Node):
-        uncle=node.get_uncle()
-        if uncle.get_color()=='R': #case 1
-            node.get_parent().change_color('B')
-            uncle.change_color('B')
-            node.get_grand_parent().change_color('R')
-            node=node.get_grand_parent()
-        else:
-            node=node.get_parent()
-            if node==node.get_parent().get_right_node(): #case 2
-                self.left_rotate(node)
-            node.change_color('B')#case 3
-            node.get_parent().change_color('R')
-            self.right_rotate(node.get_parent())
-        return node
-    
-    def fix_rightChild_parent(self,node:Node):
-        uncle=node.get_uncle()
-        if uncle.get_color()=='R': #case 1
-            node.get_parent().change_color('B')
-            uncle.change_color('B')
-            node.get_grand_parent().change_color('R')
-            node=node.get_grand_parent()
-        else:
-            node=node.get_parent()
-            if node==node.get_parent().get_left_node(): #case 2
-                self.right_rotate(node)
-            node.change_color('B')#case 3
-            node.get_parent().change_color('R')
-            self.left_rotate(node.get_parent())
-        return node
 
     # Debug
     def print_red_black_tree(self):
@@ -177,11 +173,11 @@ class RedBlackTree:
             self.print_tree_helper(node.get_right_node(), indent, True)
 
 
-""" rb = RedBlackTree()
-rb.insert("abdallah")
-rb.insert("nada")
-rb.insert("sarah")
-rb.insert("coffee")
-rb.insert("apple")
-rb.insert("flower")
-rb.print_red_black_tree() """
+# rb = RedBlackTree()
+# rb.insert("abdallah")
+# rb.insert("nada")
+# rb.insert("sarah")
+# rb.insert("coffee")
+# rb.insert("apple")
+# rb.insert("flower")
+# rb.print_red_black_tree() 

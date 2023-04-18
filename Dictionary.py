@@ -19,11 +19,12 @@ class Dictionary:
             print("ERROR: Word already in the dictionary!")
         else:
             self.__rbTree.insert(word)
-            print(self.size())
-            print(self.rbTree_height())
 
     def size(self):
         return self.__rbTree.get_size()
 
     def rbTree_height(self):
         return self.__rbTree.get_height()
+    
+    def print_tree(self):
+        self.__rbTree.print_red_black_tree()
