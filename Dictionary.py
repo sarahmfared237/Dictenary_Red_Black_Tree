@@ -6,9 +6,10 @@ class Dictionary:
         self.__rbTree = RedBlackTree()
 
     def load(self, filename):
-        with open(f'C:/Users/nadam/OneDrive/Desktop/rb/Dictenary_Red_Black_Tree/{filename}.txt', 'r') as file:
+        with open(f'{filename}.txt', 'r') as file:
             lines = file.readlines()
             for line in lines:
+                print(line)
                 self.__rbTree.insert(line[:-1])
     
     def look_up(self, word):

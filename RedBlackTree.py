@@ -90,33 +90,31 @@ class RedBlackTree:
 
         y.set_parent(x)
 
-    def insert(self, data):
-        new_node = Node(data,'R')         
-        self.__insert_helper(new_node)
-        self.inc_size()
-    
-    def __insert_helper(self, node:Node):
-        x=Nil.get_instance()
-        temp=self.get_root()
-        while(temp!=Nil.get_instance()):
-            x=temp
-            if(node.get_value()<temp.get_value()):
-                temp=temp.get_left_node()
-            else:
-                temp=temp.get_right_node()
-        node.set_parent(x)
-        if x==Nil.get_instance():
-            self.set_root(node)
-        elif node.get_value() < x.get_value():
-            x.set_left_node(node)
-        else:
-            x.set_right_node(node)
-        node.set_left_node(Nil.get_instance())
-        node.set_right_node(Nil.get_instance())
-        #node.change_color('R')
-        self.insert_fixup(node)
+    def __insert_helper(self, data, root:Node, parent:Node, height):
+        if root == Nil.get_instance():
+            new_node = Node(data, 'R')
+            new_node.set_parent(parent)
 
-    def insert_fixup(self, node:Node):
+            if self.get_root() == Nil.get_instance():
+                self.set_root(new_node)
+            else:
+                if data > parent.get_value():
+                    parent.set_right_node(new_node)
+                else:
+                    parent.set_left_node(new_node)
+
+            self.__insert_fixup(new_node)
+        
+        elif data > root.get_value():
+            self.__insert_helper(data, root.get_right_node(), root, height + 1)
+        else:
+            self.__insert_helper(data, root.get_left_node(), root, height + 1)
+        
+    def insert(self, data):            
+        self.__insert_helper(data, self.get_root(), Nil.get_instance(), 0)
+        self.inc_size()
+
+    def __insert_fixup(self, node:Node):
         while node.get_parent().get_color()=='R':
             if node.get_parent()==node.get_grand_parent().get_left_node():
                 self.fix_leftChild_parent(node)

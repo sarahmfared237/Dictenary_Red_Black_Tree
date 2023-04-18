@@ -3,7 +3,7 @@ from Dictionary import Dictionary
 def main():
     dic = Dictionary()
     dic.load("EN-US-Dictionary")
-    size_validation(dic)
+    # size_validation(dic)
     while(True):
         y=input("If you want to insert press 1\nIf you want to look up a word press 2\n")
         if y=="1":  
