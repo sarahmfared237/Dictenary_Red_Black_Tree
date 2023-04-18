@@ -90,7 +90,7 @@ class RedBlackTree:
 
         y.set_parent(x)
 
-    def __insert_helper(self, data, root:Node, parent:Node, height):
+    def __insert_helper(self, data, root:Node, parent:Node):
         if root == Nil.get_instance():
             new_node = Node(data, 'R')
             new_node.set_parent(parent)
@@ -106,23 +106,24 @@ class RedBlackTree:
             self.__insert_fixup(new_node)
         
         elif data > root.get_value():
-            self.__insert_helper(data, root.get_right_node(), root, height + 1)
+            self.__insert_helper(data, root.get_right_node(), root)
         else:
-            self.__insert_helper(data, root.get_left_node(), root, height + 1)
+            self.__insert_helper(data, root.get_left_node(), root)
         
     def insert(self, data):            
-        self.__insert_helper(data, self.get_root(), Nil.get_instance(), 0)
+        self.__insert_helper(data, self.get_root(), Nil.get_instance())
         self.inc_size()
 
     def __insert_fixup(self, node:Node):
         while node.get_parent().get_color()=='R':
             if node.get_parent()==node.get_grand_parent().get_left_node():
-                self.fix_leftChild_parent(node)
+                node = self.fix_leftChild_parent(node)
             else:
-                self.fix_rightChild_parent(node)   
+                node = self.fix_rightChild_parent(node)
+   
         self.get_root().change_color('B')
 
-    def fix_leftChild_parent(self,node:Node):
+    def fix_leftChild_parent(self, node:Node):
         uncle=node.get_uncle()
         if uncle.get_color()=='R': #case 1
             node.get_parent().change_color('B')
@@ -130,13 +131,14 @@ class RedBlackTree:
             node.get_grand_parent().change_color('R')
             node=node.get_grand_parent()
         else:
+            node=node.get_parent()
             if node==node.get_parent().get_right_node(): #case 2
-                node=node.get_parent()
                 self.left_rotate(node)
-                node.get_parent().change_color('B')#case 3
-                node.get_grand_parent().change_color('R')
-                self.right_rotate(node.get_grand_parent())
-
+            node.change_color('B')#case 3
+            node.get_parent().change_color('R')
+            self.right_rotate(node.get_parent())
+        return node
+    
     def fix_rightChild_parent(self,node:Node):
         uncle=node.get_uncle()
         if uncle.get_color()=='R': #case 1
@@ -145,12 +147,13 @@ class RedBlackTree:
             node.get_grand_parent().change_color('R')
             node=node.get_grand_parent()
         else:
+            node=node.get_parent()
             if node==node.get_parent().get_left_node(): #case 2
-                node=node.get_parent()
                 self.right_rotate(node)
-                node.get_parent().change_color('B')#case 3
-                node.get_grand_parent().change_color('R')
-                self.left_rotate(node.get_grand_parent())
+            node.change_color('B')#case 3
+            node.get_parent().change_color('R')
+            self.left_rotate(node.get_parent())
+        return node
 
     # Debug
     def print_red_black_tree(self):

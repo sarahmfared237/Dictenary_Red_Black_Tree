@@ -9,12 +9,10 @@ class Dictionary:
         with open(f'{filename}.txt', 'r') as file:
             lines = file.readlines()
             for line in lines:
-                print(line)
                 self.__rbTree.insert(line[:-1])
     
     def look_up(self, word):
         return self.__rbTree.search(word) 
-
 
     def insert_word(self, word):
         if self.look_up(word):
@@ -23,7 +21,6 @@ class Dictionary:
             self.__rbTree.insert(word)
             print(self.size())
             print(self.rbTree_height())
-        #self.__rbTree.print_red_black_tree()
 
     def size(self):
         return self.__rbTree.get_size()
