@@ -9,7 +9,7 @@ class Dictionary:
         with open(f'{filename}.txt', 'r') as file:
             lines = file.readlines()
             for line in lines:
-                self.__rbTree.insert(line[:-1])
+                self.__rbTree.insert(line[:-1]) # Remove '\n'
     
     def look_up(self, word):
         return self.__rbTree.search(word) 

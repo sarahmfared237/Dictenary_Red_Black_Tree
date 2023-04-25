@@ -11,19 +11,24 @@ class Node:
             self.__right_node = Nil.get_instance()
 
     def get_grand_parent(self):
+
+        # If no Grand parent
         if self.get_parent() == Nil.get_instance():
             return Nil.get_instance()
         
         return self.get_parent().get_parent()
     
     def get_uncle(self):
+
+        # If no Parent or Grand Parent
         if self.get_parent() == Nil.get_instance() or self.get_grand_parent() == Nil.get_instance():
             return Nil.get_instance()
 
+        # If the parent on the left
         if self.get_grand_parent().get_left_node() == self.get_parent():
             return self.get_grand_parent().get_right_node()
 
-        return self.get_grand_parent().get_left_node()
+        return self.get_grand_parent().get_left_node() # If the parent on the Right
 
     def set_parent(self, parent:'Node'):
         self.__parent = parent
@@ -55,6 +60,7 @@ class Node:
     def __str__(self):
         return f"{self.get_value()}({self.get_color()})"   
     
+
 
 # Singleton Nil class
 class Nil():

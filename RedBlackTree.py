@@ -4,7 +4,6 @@ class RedBlackTree:
     def __init__(self):
         self.__root = Nil.get_instance()
         self.__size = 0
-        self.__height = 0
 
     def get_root(self) -> Node:
         return self.__root
@@ -47,7 +46,7 @@ class RedBlackTree:
         return self.__search_helper(data, self.get_root())
         
     def left_rotate(self, x:Node):
-        y = x.get_right_node()
+        y = x.get_right_node()  # y is x child
         x.set_right_node(y.get_left_node())
 
         if y.get_left_node() != Nil.get_instance():
@@ -69,7 +68,7 @@ class RedBlackTree:
         x.set_parent(y)
 
     def right_rotate(self, y:Node):
-        x = y.get_left_node()
+        x = y.get_left_node()   # x is y child
         y.set_left_node(x.get_right_node())
 
         if x.get_right_node() != Nil.get_instance():
@@ -138,7 +137,7 @@ class RedBlackTree:
         while node.get_parent().get_color() == 'R':
             if node.get_uncle().get_color() == 'R':
                 self.fixup_case1(node)
-                node = node.get_grand_parent()
+                node = node.get_grand_parent() # Go up 2 levels
             else:
                 # Case 2
                 if ((node.get_grand_parent().get_left_node() == node.get_parent() and node.get_parent().get_right_node() == node) or 
